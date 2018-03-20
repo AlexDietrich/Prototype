@@ -79,6 +79,20 @@ namespace Prototype
                     Console.WriteLine("Name = " + collectible.name + " ... Speed-Up = " + collectible.speedUp);
                 }
             }
+
+            Console.WriteLine("------------------------------------------------------");
+
+            foreach (var item in items)
+            {
+                if (item.GetType() == typeof(Weapon) && item.name == "Conan")
+                {
+                    Weapon weapon = (Weapon)item;
+                    Console.WriteLine("Found the correct weapon out of the Items-List:");
+                    Console.WriteLine("Name = " + weapon.name + " ... Type = " + weapon.type + " ... Damage = " + weapon.damage);
+                    //If i found one weapon with the given name, stop to iterate through all elements.
+                    break;
+                }
+            }
         }
 
         /// <summary>

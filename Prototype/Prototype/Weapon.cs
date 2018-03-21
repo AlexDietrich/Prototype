@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Prototype
 {
-    class Weapon : Item
+    internal class Weapon : Item
     {
         public int damage { get; private set; }
         public float speed { get; private set; }
@@ -16,19 +16,16 @@ namespace Prototype
         
         public Weapon() { }
 
-        private Weapon(string name, string type) : base(name, type) { }
-        
-        public override IPrototype Clone(string type, string name, ItemCatagories catagory)
-        {
-            return new Weapon(name, type);
-        }
-
-        public void SetAttribute(int dmg, float spd, float rng, float wgt)
+        public Weapon(string name, string type, int dmg, float spd, float rng, float wgt) : base(name, type, wgt)
         {
             this.damage = dmg;
-            this.range = rng;
             this.speed = spd;
-            this.weight = wgt;
+            this.range = rng;
+        }
+        
+        public override IPrototype Clone()
+        {
+            return (IPrototype)this.MemberwiseClone();
         }
     }
 }

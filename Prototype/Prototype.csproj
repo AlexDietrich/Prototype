@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ItemCatagories.cs" />
+    <Compile Include="ItemLoader\CollectibleLoader.cs" />
+    <Compile Include="ItemLoader\ItemLoader.cs" />
+    <Compile Include="ItemLoader\WeaponLoader.cs" />
     <Compile Include="Prototype\PrototypeFactory.cs" />
-    <Compile Include="Prototype\Collectibles.cs" />
+    <Compile Include="Prototype\Collectible.cs" />
     <Compile Include="Prototype\IPrototype.cs" />
     <Compile Include="Prototype\Item.cs" />
     <Compile Include="Program.cs" />

@@ -8,6 +8,6 @@ namespace Prototype
 {
     public interface IPrototype
     {
-        IPrototype Clone(string type, string name, ItemCatagories catagory);
+        IPrototype Clone();
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Prototype
 {
-    public enum ItemCatagories
+    internal abstract class ItemLoader
     {
-        Weapon, Collectible
+        public abstract void LoadItems(ref IDictionary<string, Item> items);
     }
 }

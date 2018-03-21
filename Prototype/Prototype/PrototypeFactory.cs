@@ -7,28 +7,31 @@ using Prototype.Prototype;
 
 namespace Prototype
 {
-    class PrototypeFactory : IPrototype
+    internal class PrototypeFactory
     {
-        private readonly Weapon _weapon = new Weapon();
-        private readonly Collectibles _collectible = new Collectibles();
+        private readonly IDictionary<string, Item> _items = new Dictionary<string, Item>();
 
-        private PrototypeFactory() { }
+        private PrototypeFactory()
+        {
+            var collectibles = new CollectibleLoader();
+            var weapons = new WeaponLoader();
+
+            weapons.LoadItems(ref _items);
+            collectibles.LoadItems(ref _items);
+        }
 
         public static PrototypeFactory Instance { get; } = new PrototypeFactory();
 
-        public IPrototype Clone(string type, string name, ItemCatagories category)
+        public IPrototype Clone(string name)
         {
             IPrototype p = null;
-            switch (category)
+            if (_items.ContainsKey(name))
             {
-                case ItemCatagories.Weapon:
-                    p = _weapon.Clone(name, type, category);
-                    break;
-                case ItemCatagories.Collectible:
-                    p = _collectible.Clone(name, type, category);
-                    break;
-                default:
-                    throw new NullReferenceException();
+                p = _items[name].Clone();
+            }
+            else
+            {
+                throw new ArgumentException("Kein Item mit Namen: " + name + " gefunden!");
             }
             return p;
         }

@@ -13,43 +13,53 @@ namespace Prototype
     {
         static void Main(string[] args)
         {
-            List<Item> items = new List<Item>();
-            List<Collectibles> collectibleItems = new List<Collectibles>();
-            List<Weapon> weaponItems = new List<Weapon>();
-            PrototypeFactory itemFactory = PrototypeFactory.Instance;
+            var itemFactory = PrototypeFactory.Instance;
+            var items = new List<Item>();
+            var collectibleItems = new List<Collectible>();
+            var weaponItems = new List<Weapon>();
 
-            Weapon longSword = (Weapon)itemFactory.Clone("Breitschwert", "Longsword", ItemCatagories.Weapon);
-            longSword.SetAttribute(100, 1.2f, 20f, 5.5f);
-            items.Add(longSword);
-            weaponItems.Add(longSword);
+            try
+            {
+                var longSword = (Weapon) itemFactory.Clone("Aschenbringer");
+                items.Add(longSword);
+                weaponItems.Add(longSword);
 
-            Weapon knife = (Weapon)itemFactory.Clone("Schlachtmesser", "Knife", ItemCatagories.Weapon);
-            knife.SetAttribute(10, 2f, 10f, 2.2f);
-            items.Add(knife);
-            weaponItems.Add(knife);
+                var knife = (Weapon)itemFactory.Clone("Schlachtmesser");
+                items.Add(knife);
+                weaponItems.Add(knife);
 
-            Weapon shortSword = (Weapon)itemFactory.Clone("Schweinetöter", "Shortsword", ItemCatagories.Weapon);
-            shortSword.SetAttribute(55, 1.6f, 15f, 3.8f);
-            items.Add(shortSword);
-            weaponItems.Add(shortSword);
+                var shortSword = (Weapon)itemFactory.Clone("Höllentor");
+                items.Add(shortSword);
+                weaponItems.Add(shortSword);
+                
+                var healPotion = (Collectible)itemFactory.Clone("Heiltrank");
+                items.Add(healPotion);
+                collectibleItems.Add(healPotion);
 
-            Collectibles speedUp = (Collectibles)itemFactory.Clone("HuiHuiRun", "Speed-Up-Item", ItemCatagories.Collectible);
-            speedUp.SetSpeedUp(2.0f);
-            items.Add(speedUp);
-            collectibleItems.Add(speedUp);
+                var manaPotion = (Collectible)itemFactory.Clone("Manatrank");
+                items.Add(manaPotion);
+                collectibleItems.Add(manaPotion);
 
-            Collectibles timeUp = (Collectibles)itemFactory.Clone("Slow down Bro!", "Time-Up-Item", ItemCatagories.Collectible);
-            timeUp.SetTimeUp(3.2f);
-            items.Add(timeUp);
-            collectibleItems.Add(timeUp);
+                var speedUp = (Collectible)itemFactory.Clone("Geschwindigkeitstrank");
+                items.Add(speedUp);
+                collectibleItems.Add(speedUp);
 
-            ReadConfigWeapon(ref items, ref weaponItems);
+                //Try to clone an item which doesn't exist in the config file. Program should write an Error into the console but don't break.
+                Collectible chuckNorrisBooster = (Collectible) itemFactory.Clone("ChuckNorris");
+                items.Add(chuckNorrisBooster);
+                collectibleItems.Add(chuckNorrisBooster);
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine("RuntimeException bei Zeilen 23 - 51 aufgetreten: " + e.Message);
+            }
 
+            #region Konsolenausgabe der Listen
             //Print all the lists to show that each element is a clone from the same class but with different types saved in it.
             Console.WriteLine("The list of all items:");
             foreach (var item in items)
             {
-                Console.WriteLine("Name = " + item.name + " ... Type = " + item.type);
+                Console.WriteLine("Name = " + item?.name + " ... Type = " + item?.type);
             }
 
             Console.WriteLine("------------------------------------------------------");
@@ -57,7 +67,7 @@ namespace Prototype
 
             foreach (var weapon in weaponItems)
             {
-                Console.WriteLine("Name = " + weapon.name + " ... Type = " + weapon.type + " ... Damage = " + weapon.damage + " ... Range = " + weapon.range + " ... weight = " + weapon.weight);
+                Console.WriteLine("Name = " + weapon?.name + " ... Type = " + weapon?.type + " ... Damage = " + weapon?.damage + " ... Range = " + weapon?.range + " ... weight = " + weapon?.weight);
             }
 
             Console.WriteLine("------------------------------------------------------");
@@ -65,15 +75,15 @@ namespace Prototype
 
             foreach (var collectible in collectibleItems)
             {
-                Console.WriteLine("Name = " + collectible.name + " ... Type = " + collectible.type + " ... Speed = " + collectible.speedUp + " ... Time = " + collectible.timeUp);
+                Console.WriteLine("Name = " + collectible?.name + " ... Type = " + collectible?.type + " ... Speed = " + collectible?.speedUp + " ... Time = " + collectible?.timeUp);
             }
 
             //Finding the correct Item in the Itemslist and print the correct stats into the console.
             foreach (var item in items)
             {
-                if (item.GetType() == typeof(Collectibles) && item.name == "HuiHuiRun")
+                if (item?.GetType() == typeof(Collectible) && item?.name == "Geschwindigkeitstrank")
                 {
-                    Collectibles collectible = (Collectibles)item;
+                    Collectible collectible = (Collectible)item;
                     Console.WriteLine("------------------------------------------------------");
                     Console.WriteLine("Found the correct collectible out of the Items-List:");
                     Console.WriteLine("Name = " + collectible.name + " ... Speed-Up = " + collectible.speedUp);
@@ -84,7 +94,7 @@ namespace Prototype
 
             foreach (var item in items)
             {
-                if (item.GetType() == typeof(Weapon) && item.name == "Conan")
+                if (item?.GetType() == typeof(Weapon) && item?.name == "Conan")
                 {
                     Weapon weapon = (Weapon)item;
                     Console.WriteLine("Found the correct weapon out of the Items-List:");
@@ -93,39 +103,8 @@ namespace Prototype
                     break;
                 }
             }
-        }
-
-        /// <summary>
-        /// Read the weapon config-file and add it to the given list of items and / or weapons. 
-        /// </summary>
-        /// <param name="items">list of items</param>
-        /// <param name="weaponItems">list of weapons</param>
-        private static void ReadConfigWeapon(ref List<Item> items, ref List<Weapon> weaponItems)
-        {
-            //get instance of the PrototypeFactory which you need to clone the prototype classes
-            PrototypeFactory itemFactory = PrototypeFactory.Instance;
-            //get all the lines of the config into the string array line by line
-            string[] lines = System.IO.File.ReadAllLines(@"config");
-            foreach (var line in lines)
-            {
-                //dictionary which saves each attribute of the weapon in the config file  as a key-value pair
-                IDictionary<string, string> _items = new Dictionary<string, string>();
-                //split the line of the config file to get each attribute of the weapon
-                string[] seperatedLine = line.Split(';');
-                //Go through each attribute from the weapons config file and save it as a key-value pair in the dictionary
-                foreach (var item in seperatedLine)
-                {
-                    string[] singleItem = item.Split('=');
-                    _items.Add(singleItem[0], singleItem[1]);
-                }
-                //give the seperated values to the itemfactory to get the weapon clone, set the attributes of the weapon before adding to given lists.
-                Weapon weapon = (Weapon)itemFactory.Clone(_items["name"], _items["type"], ItemCatagories.Weapon);
-                weapon.SetAttribute(Int32.Parse(_items["damage"]), float.Parse(_items["speed"]), float.Parse(_items["range"]), float.Parse(_items["weight"]));
-                items.Add(weapon);
-                weaponItems.Add(weapon);
-            }
+            #endregion
 
         }
-
     }
 }

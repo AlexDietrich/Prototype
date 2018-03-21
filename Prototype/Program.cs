@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,11 @@ using Prototype.Prototype;
 
 namespace Prototype
 {
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+    [SuppressMessage("ReSharper", "ArrangeTypeModifiers")]
     class Program
     {
+        [SuppressMessage("ReSharper", "ArrangeTypeMemberModifiers")]
         static void Main(string[] args)
         {
             var itemFactory = PrototypeFactory.Instance;
@@ -45,7 +49,7 @@ namespace Prototype
                 collectibleItems.Add(speedUp);
 
                 //Try to clone an item which doesn't exist in the config file. Program should write an Error into the console but don't break.
-                Collectible chuckNorrisBooster = (Collectible) itemFactory.Clone("ChuckNorris");
+                var chuckNorrisBooster = (Collectible) itemFactory.Clone("ChuckNorris");
                 items.Add(chuckNorrisBooster);
                 collectibleItems.Add(chuckNorrisBooster);
             }
@@ -63,7 +67,7 @@ namespace Prototype
             }
 
             Console.WriteLine("------------------------------------------------------");
-            Console.WriteLine("The list of Weapons:");
+            Console.WriteLine("The list of weapons:");
 
             foreach (var weapon in weaponItems)
             {
@@ -71,7 +75,7 @@ namespace Prototype
             }
 
             Console.WriteLine("------------------------------------------------------");
-            Console.WriteLine("The list of Collectibles:");
+            Console.WriteLine("The list of collectibles:");
 
             foreach (var collectible in collectibleItems)
             {
@@ -81,27 +85,23 @@ namespace Prototype
             //Finding the correct Item in the Itemslist and print the correct stats into the console.
             foreach (var item in items)
             {
-                if (item?.GetType() == typeof(Collectible) && item?.name == "Geschwindigkeitstrank")
-                {
-                    Collectible collectible = (Collectible)item;
-                    Console.WriteLine("------------------------------------------------------");
-                    Console.WriteLine("Found the correct collectible out of the Items-List:");
-                    Console.WriteLine("Name = " + collectible.name + " ... Speed-Up = " + collectible.speedUp);
-                }
+                if (item?.GetType() != typeof(Collectible) || item?.name != "Geschwindigkeitstrank") continue;
+                var collectible = (Collectible)item;
+                Console.WriteLine("------------------------------------------------------");
+                Console.WriteLine("Found the \"Geschwindigkeitstrank\" from the item-list:");
+                Console.WriteLine("Name = " + collectible.name + " ... Speed-Up = " + collectible.speedUp);
             }
 
             Console.WriteLine("------------------------------------------------------");
 
             foreach (var item in items)
             {
-                if (item?.GetType() == typeof(Weapon) && item?.name == "Conan")
-                {
-                    Weapon weapon = (Weapon)item;
-                    Console.WriteLine("Found the correct weapon out of the Items-List:");
-                    Console.WriteLine("Name = " + weapon.name + " ... Type = " + weapon.type + " ... Damage = " + weapon.damage);
-                    //If i found one weapon with the given name, stop to iterate through all elements.
-                    break;
-                }
+                if (item?.GetType() != typeof(Weapon) || item?.name != "Schlachtmesser") continue;
+                var weapon = (Weapon)item;
+                Console.WriteLine("Found the \"Schlachtmesser\" from the item-list:");
+                Console.WriteLine("Name = " + weapon.name + " ... Type = " + weapon.type + " ... Damage = " + weapon.damage);
+                //If i found one weapon with the given name, stop to iterate through all elements.
+                break;
             }
             #endregion
 

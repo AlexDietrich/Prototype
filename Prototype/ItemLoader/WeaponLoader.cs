@@ -25,7 +25,7 @@ namespace Prototype
                     _items.Add(singleItem[0], singleItem[1]);
                 }
 
-                //give the seperated values to the itemfactory to get the weapon clone, set the attributes of the weapon before adding to given lists.
+                //add the weapon to the referenced item-list.
                 weapons.Add(_items["name"],
                     new Weapon(_items["name"], _items["type"], Int32.Parse(_items["damage"]),
                         float.Parse(_items["speed"]), float.Parse(_items["range"]), float.Parse(_items["weight"])));

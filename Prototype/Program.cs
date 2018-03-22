@@ -55,7 +55,7 @@ namespace Prototype
             }
             catch (ArgumentException e)
             {
-                Console.WriteLine("RuntimeException bei Zeilen 23 - 51 aufgetreten: " + e.Message);
+                Console.WriteLine("RuntimeException beim Erstellen der Arbeitsobjekte: " + e.Message);
             }
 
             #region Konsolenausgabe der Listen

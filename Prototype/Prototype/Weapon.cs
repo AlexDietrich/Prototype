@@ -14,8 +14,6 @@ namespace Prototype
         public float speed { get; private set; }
         public float range { get; private set;  }
         
-        public Weapon() { }
-
         public Weapon(string name, string type, int dmg, float spd, float rng, float wgt) : base(name, type, wgt)
         {
             this.damage = dmg;

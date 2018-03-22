@@ -12,7 +12,7 @@ namespace Prototype
     {
         public string name { get; private set; }
         public string type { get; private set; }
-        public float weight { get; protected set; } = 0;
+        public float weight { get; private set; } = 0;
 
         protected Item() { }
         protected Item(string name, string type, float weight)

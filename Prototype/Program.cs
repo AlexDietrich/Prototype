@@ -48,7 +48,7 @@ namespace Prototype
                 items.Add(speedUp);
                 collectibleItems.Add(speedUp);
 
-                //Try to clone an item which doesn't exist in the config file. Program should write an Error into the console but don't break.
+                //Try to clone an item which doesn't exist in the config file. Program should write an Error into the console and brake the try-block.
                 var chuckNorrisBooster = (Collectible) itemFactory.Clone("ChuckNorris");
                 items.Add(chuckNorrisBooster);
                 collectibleItems.Add(chuckNorrisBooster);

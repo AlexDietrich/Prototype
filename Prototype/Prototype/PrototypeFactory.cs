@@ -21,15 +21,8 @@ namespace Prototype.Prototype
 
         public IPrototype Clone(string name)
         {
-            IPrototype p = null;
-            if (_items.ContainsKey(name))
-            {
-                p = _items[name].Clone();
-            }
-            else
-            {
-                throw new ArgumentException("Kein Item mit Namen: " + name + " gefunden!");
-            }
+            if (!_items.ContainsKey(name)) throw new ArgumentException("Kein Item mit Namen: " + name + " gefunden!");
+            var p = _items[name].Clone();
             return p;
         }
     }

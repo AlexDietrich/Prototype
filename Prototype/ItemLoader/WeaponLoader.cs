@@ -13,20 +13,20 @@ namespace Prototype.ItemLoader
             foreach (var line in lines)
             {
                 //dictionary which saves each attribute of the weapon in the config file  as a key-value pair
-                IDictionary<string, string> _items = new Dictionary<string, string>();
+                IDictionary<string, string> items = new Dictionary<string, string>();
                 //split the line of the config file to get each attribute of the weapon
                 var seperatedLine = line.Split(';');
                 //Go through each attribute from the weapons config file and save it as a key-value pair in the dictionary
                 foreach (var item in seperatedLine)
                 {
                     var singleItem = item.Split('=');
-                    _items.Add(singleItem[0], singleItem[1]);
+                    items.Add(singleItem[0], singleItem[1]);
                 }
 
                 //add the weapon to the referenced item-list.
-                weapons.Add(_items["name"],
-                    new Weapon(_items["name"], _items["type"], Int32.Parse(_items["damage"]),
-                        float.Parse(_items["speed"]), float.Parse(_items["range"]), float.Parse(_items["weight"])));
+                weapons.Add(items["name"],
+                    new Weapon(items["name"], items["type"], int.Parse(items["damage"]),
+                        float.Parse(items["speed"]), float.Parse(items["range"]), float.Parse(items["weight"])));
             }
         }
     }
